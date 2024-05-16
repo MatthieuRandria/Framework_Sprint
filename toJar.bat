@@ -1,10 +1,28 @@
 echo off
 
-set src="controller\*.java"
-javac "%src%" -d classes
+set "current=."
+set "temp=temp"
 
-set archive=".\classes"
-jar -cf Sprint_FW.jar -C %archive% .
+if not exist "%temp%" mkdir "%temp%"
 
-move Sprint_FW.jar ..\Test\lib
-rmdir /s /q %archive%
+:: Pour chaque fichier, miditra recursivement de copiena izay *.java to temp
+for /r "%current%" %%f in (*.java) do (
+    set chemin_complet="%%~f"
+    @REM set nom_fichier="%%~nf.java"
+
+
+    copy "%%~f" "%temp%\" > nul
+)
+
+set /p projet="Nom du Jar:"
+set archive=%projet%.jar
+
+javac -d temp\class\ temp\*.java
+cd %temp%\class
+jar -cf %archive% .\
+cd ..\..\
+xcopy "temp\class\%archive%" "%current%" /y
+
+rmdir /S /Q %temp%
+
+move Sprint1.jar ..\Test\lib\
