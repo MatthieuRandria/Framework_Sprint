@@ -3,6 +3,7 @@ package controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.text.Annotation;
 import java.util.ArrayList;
 
 import annotation.AnnotController;
@@ -37,20 +38,20 @@ public class ControllerManager {
     }    
 
     // Check foreach class if it is a controller
-    public static ArrayList<Class<?>> getControllerClasses(String packageName) throws ClassNotFoundException, IOException{
+    public static ArrayList<Class<?>> getAnnotatedClasses(String packageName,Class<? extends java.lang.annotation.Annotation> annotation) throws ClassNotFoundException, IOException{
         ArrayList<Class<?>> classes=getClasses(packageName); // Alaina lony ny class rehetra possible
-        ArrayList<Class<?>> controllers=new ArrayList<Class<?>>();
+        ArrayList<Class<?>> results=new ArrayList<Class<?>>();
         for (Class<?> class1 : classes) {
-            if (class1.isAnnotationPresent(AnnotController.class)) { // Ho an'izay manana annotation 'AnnotController'
-                controllers.add((class1));  // Ampidirina ao @liste controllers
+            if (class1.isAnnotationPresent(annotation)) { // Ho an'izay manana annotation 'AnnotController'
+                results.add((class1));  // Ampidirina ao @liste results
             }
         }
-        return controllers;
+        return results;
     }
 
     public static void main(String[] args) {
         try {
-            ArrayList<Class<?>> controller=ControllerManager.getControllerClasses("controller");
+            ArrayList<Class<?>> controller=ControllerManager.getAnnotatedClasses("controller",AnnotController.class);
             for (Class<?> class1 : controller) {
                 System.err.println(class1.getSimpleName());
             }
