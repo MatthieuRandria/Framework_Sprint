@@ -13,28 +13,35 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @AnnotController(name = "FrontController")
 public class FrontController extends HttpServlet{
+    private boolean checked=false;
+    private ArrayList<Class<?>> controllers=null;
 
-    private void processRequest(HttpServletRequest req,HttpServletResponse resp)throws ServletException, IOException{
-        PrintWriter out=resp.getWriter();
-        out.println("Nitontona tato @  :"+req.getRequestURI());
-        
+    public void init(){
         String packageName=this.getInitParameter("packageName");
-        out.println(packageName);
-
         try {
-            ArrayList<Class<?>> controller=ControllerManager.getControllerClasses(packageName);
-            if(controller!=null){
-                out.println("Liste des Controllers:");
-                for (Class<?> class1 : controller) {
-                    out.println("   -"+class1.getSimpleName());
-                }
-            }else{
-                out.println("None");
-            }
+            this.controllers=ControllerManager.getAnnotatedClasses(packageName,AnnotController.class);
+            this.checked=true;
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    private void processRequest(HttpServletRequest req,HttpServletResponse resp)throws ServletException, IOException{
+        if(!this.checked){
+            this.init();
+        }
+
+        PrintWriter out=resp.getWriter();
+        out.println("Nitontona tato @  :"+req.getRequestURI());
+
+        if(this.controllers!=null){
+            out.println("Liste des Controllers:");
+            for (Class<?> class1 : this.controllers) {
+                out.println("   -"+class1.getSimpleName());
+            }
+        }else{
+            out.println("No controller found");
+        }
     }
 
     @Override
