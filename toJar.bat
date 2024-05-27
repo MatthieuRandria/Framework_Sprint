@@ -10,7 +10,6 @@ for /r "%current%" %%f in (*.java) do (
     set chemin_complet="%%~f"
     @REM set nom_fichier="%%~nf.java"
 
-
     copy "%%~f" "%temp%\" > nul
 )
 
@@ -25,4 +24,4 @@ xcopy "temp\class\%archive%" "%current%" /y
 
 rmdir /S /Q %temp%
 
-move Sprint1.jar ..\Test\lib\
+move "%archive%" ..\Test\lib\
