@@ -3,10 +3,7 @@ package controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.text.Annotation;
 import java.util.ArrayList;
-
-import annotation.AnnotController;
 
 public class ControllerManager {
     public static String getSimpleFileName(String fileName,String extension){
@@ -14,7 +11,7 @@ public class ControllerManager {
     }
 
     // Get all classes in the directory
-    public static ArrayList<Class<?>> getClasses(String packageName ) throws ClassNotFoundException, IOException{
+    public static ArrayList<Class<?>> getClasses(String packageName) throws ClassNotFoundException, IOException{
         ArrayList<Class<?>> classes= new ArrayList<Class<?>>();
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         String path = packageName.replace('.', '/');
@@ -49,14 +46,4 @@ public class ControllerManager {
         return results;
     }
 
-    public static void main(String[] args) {
-        try {
-            ArrayList<Class<?>> controller=ControllerManager.getAnnotatedClasses("controller",AnnotController.class);
-            for (Class<?> class1 : controller) {
-                System.err.println(class1.getSimpleName());
-            }
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-    }
 }
