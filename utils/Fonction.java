@@ -12,7 +12,11 @@ public class Fonction {
     @Get(url = "/URLextracting")
     public static String urlExtract(String url){
         String[] splitUrl=url.split("/");
-        String res="/"+splitUrl[splitUrl.length-1];
+        String res="/";
+        if(splitUrl.length>2){
+            res+=splitUrl[splitUrl.length-2]+"/"+splitUrl[splitUrl.length-1];
+        }
+        else res+=splitUrl[splitUrl.length-1];
         return res;
         // int length=splitUrl.length;
         // return new Mapping(splitUrl[length-2], splitUrl[length-1]);
