@@ -20,3 +20,13 @@ Sprint2:
             declarer nom du package des controllers (using 'init-param');
             declarer FrontServlet (Servlet associé a '/')
         Tester!
+
+Sprint3:
+    Tanjona: Miantso ny method mifanaraka @Url 
+    Fanaovana azy:
+        -Ao anaty controller izay efa annoté par @AnnotController, ajouter une methode qui sera annote par @Get(url = "/Zetianao") 
+        -Pour l'instant, set return type as "String" then output it.
+        -Ho an'ny config(.xml):
+            declarer nom du package des controllers (using 'init-param');
+            declarer FrontServlet (Servlet associé a '/')
+        Tester!

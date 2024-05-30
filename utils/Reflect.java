@@ -48,7 +48,7 @@ public class Reflect{
         return res;
     }
 
-    @Get(url = "/makaAnnot")
+    // @Get(url = "/makaAnnot")
     public static Field[] getFieldWithAnnot(Object o){
         Field[] fields=o.getClass().getDeclaredFields();
         Vector<Field> listFields=new Vector<Field>();
@@ -64,6 +64,11 @@ public class Reflect{
         }
         return result;
         
+    }
+
+    @Get(url = "/test")
+    public String test(){
+        return "LG don't waste it";
     }
 
     public static Object executeMethod(Object o,String method,Class<?>... args)throws Exception{

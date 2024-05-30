@@ -43,13 +43,20 @@ public class Mapping {
                 // Ampidiriana ao @Map izay methode annote
                 for (Method method : methods) {
                     System.out.println("method found: "+method.getAnnotation(Get.class).url());
-                    map.put(method.getAnnotation(Get.class).url(), new Mapping(class1.getSimpleName(), method.getName()));
+                    map.put(method.getAnnotation(Get.class).url(), new Mapping(class1.getName(), method.getName()));
                 }
             }else{
-                System.out.println("Tsy misy");
+                System.out.println("No method annotated in "+class1.getName());
             }
         }
         return map;
+    }
+
+    @SuppressWarnings("deprecation")
+    public String executeMethod(String className,String methodName) throws Exception{
+        Object obj=Class.forName(className).newInstance();
+        String res=Reflect.executeMethod(obj,methodName).toString();
+        return res;
     }
 
     public static void main(String[] args) {
@@ -57,8 +64,10 @@ public class Mapping {
             ArrayList<Class<?>> controllers=ControllerManager.getAnnotatedClasses("utils", AnnotController.class);
             Mapping mapping=new Mapping();
             HashMap<String,Mapping> map=mapping.scanController(controllers);
-            System.out.println(map.get("/makaAnnot").getClassName());
-            System.out.println(map.get("/makaAnnot").getMethodName());
+            Mapping mapping2=map.get("/test");
+            System.out.println(mapping2.getClassName());
+            System.out.println(mapping2.getMethodName());
+            System.out.println(mapping2.executeMethod(mapping2.getClassName(), mapping2.getMethodName()));
         } catch (Exception e) {
             e.printStackTrace();
         }

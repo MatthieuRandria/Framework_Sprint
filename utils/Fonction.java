@@ -9,7 +9,7 @@ public class Fonction {
         return Reflect.getAnnotatedMethod(controller, annot);
     }
 
-    @Get(url = "/URLextracting")
+    
     public static String urlExtract(String url){
         String[] splitUrl=url.split("/");
         String res="/";
