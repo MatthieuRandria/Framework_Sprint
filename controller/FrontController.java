@@ -45,6 +45,12 @@ public class FrontController extends HttpServlet{
             if (mapping!=null) {
                 out.println("Annotation: "+url);
                 out.println("Controller: "+mapping.getClassName()+", Method: "+mapping.getMethodName());
+                try {
+                    String res=mapping.executeMethod(mapping.getClassName(), mapping.getMethodName());
+                    out.println(mapping.getMethodName()+" outputed: "+res);
+                } catch (Exception e) {
+                    out.println(e.getLocalizedMessage());
+                }
             }else{
                 out.println("No mapping with key :"+url);
             }
