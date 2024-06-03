@@ -66,11 +66,6 @@ public class Reflect{
         
     }
 
-    @Get(url = "/test")
-    public String test(){
-        return "LG don't waste it";
-    }
-
     public static Object executeMethod(Object o,String method,Class<?>... args)throws Exception{
         Method method2=o.getClass().getDeclaredMethod(method, args);
         return method2.invoke(o);
