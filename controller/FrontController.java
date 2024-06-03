@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@AnnotController(name = "FrontController")
+// @AnnotController(name = "FrontController")
 public class FrontController extends HttpServlet{
     // private boolean checked=false;
     private ArrayList<Class<?>> controllers=null;
@@ -38,7 +38,7 @@ public class FrontController extends HttpServlet{
         PrintWriter out=resp.getWriter();
         out.println("Hello");
         String requestUrl=req.getRequestURI();
-        // out.println("Here are all the Mapping in HashMap");
+
         if (this.map!=null) {
             String url=Fonction.urlExtract(requestUrl);
             Mapping mapping=this.map.get(url);
@@ -46,10 +46,9 @@ public class FrontController extends HttpServlet{
                 out.println("Annotation: "+url);
                 out.println("Controller: "+mapping.getClassName()+", Method: "+mapping.getMethodName());
                 try {
-                    String res=mapping.executeMethod(mapping.getClassName(), mapping.getMethodName());
-                    out.println(mapping.getMethodName()+" outputed: "+res);
+                    mapping.proceedRequest(out, mapping, req, resp);
                 } catch (Exception e) {
-                    out.println(e.getLocalizedMessage());
+                    out.println("Error: "+e.getLocalizedMessage());
                 }
             }else{
                 out.println("No mapping with key :"+url);
