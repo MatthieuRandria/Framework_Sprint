@@ -47,8 +47,13 @@ public class Mapping {
             if (methods.length>0) {
                 // Ampidiriana ao @Map izay methode annote
                 for (Method method : methods) {
-                    System.out.println("method found: "+method.getAnnotation(Get.class).url());
-                    map.put(method.getAnnotation(Get.class).url(), new Mapping(class1.getName(), method.getName()));
+                    String url=method.getAnnotation(Get.class).url();
+                    System.out.println("method found: "+url);
+                    if (map.get(url)==null) {
+                        map.put(url, new Mapping(class1.getName(), method.getName()));
+                    }else{
+                        throw new Exception("Duplicate URL :"+url);
+                    }
                 }
             }else{
                 System.out.println("No method annotated in "+class1.getName());
@@ -69,8 +74,13 @@ public class Mapping {
         for (Map.Entry<String,Object> values : data.entrySet()) {
             request.setAttribute(values.getKey(),values.getValue());
         }
-        RequestDispatcher dispatcher=request.getServletContext().getRequestDispatcher("/"+modelView.getUrl()); // Mandefa any @.jsp miaraka @data 
-        dispatcher.forward(request, response);
+        try{
+            RequestDispatcher dispatcher=request.getServletContext().getRequestDispatcher("/"+modelView.getUrl()); // Mandefa any @.jsp miaraka @data 
+            dispatcher.forward(request, response);
+        }catch(Exception e){
+            PrintWriter out=response.getWriter();
+            out.println("Error: "+e.getLocalizedMessage());
+        }
     }
 
     public void proceedRequest(PrintWriter out,Mapping mapping,HttpServletRequest request,HttpServletResponse response) throws Exception{
@@ -87,7 +97,7 @@ public class Mapping {
             out.println(object.toString());
         
         }else{
-            out.println("Sorry, The return type '"+method.getReturnType()+"' of the method "+mapping.getMethodName()+" from "+mapping.getClassName()+" is undefined for me.");
+            throw new Exception("Sorry, The return type '"+method.getReturnType()+"' of the method "+mapping.getMethodName()+" from "+mapping.getClassName()+" is undefined for me.");
         }
     }
 
