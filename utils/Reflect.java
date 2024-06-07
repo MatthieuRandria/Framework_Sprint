@@ -5,10 +5,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Vector;
 
-import annotation.AnnotController;
 import annotation.Get;
 
-@AnnotController
 public class Reflect{
 
     public static String getClassName(Object o) {

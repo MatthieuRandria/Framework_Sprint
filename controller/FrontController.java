@@ -28,8 +28,6 @@ public class FrontController extends HttpServlet{
                 // Jerena izay method annoté par Get Pour chaque Controller
                 Mapping mapper=new Mapping();
                 this.map=mapper.scanController(controllers);
-            }else{
-                throw new Exception("No controller found");
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

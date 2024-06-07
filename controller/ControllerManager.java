@@ -11,14 +11,14 @@ public class ControllerManager {
     }
 
     // Get all classes in the directory
-    public static ArrayList<Class<?>> getClasses(String packageName) throws ClassNotFoundException, IOException{
+    public static ArrayList<Class<?>> getClasses(String packageName) throws ClassNotFoundException, IOException,Exception{
         ArrayList<Class<?>> classes= new ArrayList<Class<?>>();
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         String path = packageName.replace('.', '/');
         URL ressource= classloader.getResource(path);
 
         if(ressource == null){
-            return classes;
+            throw new Exception("Package not found: "+packageName);
         }
 
         File packageDirectory = new File(ressource.getFile().replace("%20", " "));
@@ -35,7 +35,7 @@ public class ControllerManager {
     }    
 
     // Check foreach class if it is a controller
-    public static ArrayList<Class<?>> getAnnotatedClasses(String packageName,Class<? extends java.lang.annotation.Annotation> annotation) throws ClassNotFoundException, IOException{
+    public static ArrayList<Class<?>> getAnnotatedClasses(String packageName,Class<? extends java.lang.annotation.Annotation> annotation) throws ClassNotFoundException, IOException, Exception{
         ArrayList<Class<?>> classes=getClasses(packageName); // Alaina lony ny class rehetra possible
         ArrayList<Class<?>> results=new ArrayList<Class<?>>();
         for (Class<?> class1 : classes) {
