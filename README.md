@@ -43,3 +43,15 @@ Sprint4:
             declarer nom du package des controllers (using 'init-param');
             declarer FrontServlet (Servlet associé a '/')
         Tester!
+
+Sprint5:
+    Tanjona: 
+        -Gestion d'Erreur
+            1. Raha tsy nahita controller dia throw
+            2. Raha misy doublon ny URL annote @Get iray dia throw
+            3. Raha tsy mireturn String na ModelView ny method annote par @Get dia throw
+            4. Raha tsy ita ny view andefasana ModelView na tsisy mifanaraka @ controller, 404 not Found 
+        -Ho an'ny config(.xml):
+            declarer nom du package des controllers (using 'init-param');
+            declarer FrontServlet (Servlet associé a '/')
+        Tester!
