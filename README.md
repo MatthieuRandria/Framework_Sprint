@@ -55,3 +55,13 @@ Sprint5:
             declarer nom du package des controllers (using 'init-param');
             declarer FrontServlet (Servlet associé a '/')
         Tester!
+
+Sprint6:
+        Tanjona: 
+            Manana formulaire, alaina ny donnees(ny args rehetra) formulaire, passena ny 
+        Fanaovana azy:
+        -'
+        -Ho an'ny config(.xml):
+            declarer nom du package des controllers (using 'init-param');
+            declarer FrontServlet (Servlet associé a '/')
+        Tester!

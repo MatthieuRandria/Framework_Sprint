@@ -46,9 +46,9 @@ public class FrontController extends HttpServlet{
                 out.println("Annotation: "+url);
                 out.println("Controller: "+mapping.getClassName()+", Method: "+mapping.getMethodName());
                 try {
-                    mapping.proceedRequest(out, mapping, req, resp);
+                    mapping.proceedMethod(out, mapping, req, resp);
                 } catch (Exception e) {
-                    out.println("Error: "+e.getLocalizedMessage());
+                    out.println("Error: "+e.getMessage());
                 }
             }else{
                 out.println("Error 404 not found");
