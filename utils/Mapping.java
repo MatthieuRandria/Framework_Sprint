@@ -63,10 +63,10 @@ public class Mapping {
     }
 
     @SuppressWarnings("deprecation")
-    public Object executeMethod(String className,String methodName,Class<?>... args) throws Exception{
+    public Object executeMethod(String className,String methodName,Object[] args) throws Exception{
         Object obj=Class.forName(className).newInstance();
-        Object res=Reflect.executeMethod(obj,methodName,args);
-        return res;
+        Method method=Fonction.getMethod(obj.getClass(), methodName);
+        return method.invoke(obj, args);
     }
 
     public void dispatchModelView(ModelView modelView,HttpServletRequest request,HttpServletResponse response) throws Exception{
@@ -83,6 +83,7 @@ public class Mapping {
         }
     }
 
+<<<<<<< Updated upstream
     @SuppressWarnings("deprecation")
     public void proceedMethod(PrintWriter out,Mapping mapping,HttpServletRequest request,HttpServletResponse response) throws Exception{
         Method method=(Class.forName(mapping.getClassName())).getMethod(mapping.getMethodName());
@@ -100,6 +101,33 @@ public class Mapping {
         }
 
         if (result==null) throw new Exception("Error with method :");
+=======
+
+    @SuppressWarnings("deprecation")
+    public void proceedMethod(PrintWriter out,Mapping mapping,HttpServletRequest request,HttpServletResponse response) throws Exception{
+        Object obj=Class.forName(mapping.getClassName()).newInstance();
+        Method method=Fonction.getMethod(obj.getClass(), mapping.getMethodName());
+        // Method method=(Class.forName(mapping.getClassName())).getMethod(mapping.getMethodName());
+        
+        System.out.println("Proceeding Method: "+method.getName());
+        
+        Object result=null;
+    // Raha misy arguments:
+        if (method.getParameters().length > 0) {
+            System.out.println("Misy argument ilay fonction");
+            Object object=(Class.forName(mapping.getClassName())).newInstance();
+            ArrayList<Object> methodParam = new ArrayList<>();
+            methodParam=Fonction.prepareParameter(object, method, request, response);
+            result=mapping.executeMethod(className, methodName, methodParam.toArray(new Object[]{}));
+        }
+        else{
+    // Raha tsy mila argument ilay methode :
+            System.out.println("tsy misy argument ilay fonction");
+            result=mapping.executeMethod(mapping.getClassName(), mapping.getMethodName(),null);
+        }
+
+        if (result==null) throw new Exception("Error with method : Maybe the return type is void");
+>>>>>>> Stashed changes
 
         if (method.getReturnType().equals(ModelView.class)) {
             // Si elle return ModelView, charger les data stockés dans son HashMap comme attribut et les stocker par request.setAttribute()
@@ -115,17 +143,19 @@ public class Mapping {
         }
     }
 
-
     public static void main(String[] args) {
         try {
-            ArrayList<Class<?>> controllers=ControllerManager.getAnnotatedClasses("utils", AnnotController.class);
             Mapping mapping=new Mapping();
+            ArrayList<Class<?>> controllers=ControllerManager.getAnnotatedClasses("utils", AnnotController.class);
             HashMap<String,Mapping> map=mapping.scanController(controllers);
             Mapping mapping2=map.get("/testModel");
             System.out.println(mapping2.getClassName());
             System.out.println(mapping2.getMethodName());
-            // System.out.println(mapping2.executeMethod(mapping2.getClassName(), mapping2.getMethodName()));
             // mapping.proceedTest(mapping2);
+            
+            ArrayList<Object> argus=new ArrayList<Object>();
+            argus.add("Matthieu");
+        
         } catch (Exception e) {
             e.printStackTrace();
         }

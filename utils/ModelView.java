@@ -30,8 +30,8 @@ public class ModelView {
         this.setData(data);
     }
 
-    public void add(String url,Object data){
-        this.data.put(url,data);
+    public void add(String key,Object data){
+        this.data.put(key,data);
     }
     
 }
