@@ -16,7 +16,7 @@ for /r "%current%" %%f in (*.java) do (
 set /p projet="Nom du Jar:"
 set archive=%projet%.jar
 
-javac -d temp\class\ temp\*.java
+javac -g -d temp\class\ temp\*.java 
 cd %temp%\class
 jar -cf %archive% .\
 cd ..\..\
@@ -24,4 +24,5 @@ xcopy "temp\class\%archive%" "%current%" /y
 
 rmdir /S /Q %temp%
 
+set /p ok="Finished."
 move "%archive%" ..\Test\lib\

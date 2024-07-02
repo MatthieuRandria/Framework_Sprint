@@ -48,10 +48,10 @@ public class FrontController extends HttpServlet{
                 try {
                     mapping.proceedMethod(out, mapping, req, resp);
                 } catch (Exception e) {
-                    out.println("Error: "+e.getMessage());
+                    out.println("Error : "+e.getLocalizedMessage());
                 }
             }else{
-                out.println("Error 404 not found");
+                out.println("Error 404 not found, (No Mapping for : '"+url+"'')");
             }
 
         }else{
