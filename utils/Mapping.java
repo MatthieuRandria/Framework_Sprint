@@ -79,29 +79,10 @@ public class Mapping {
             dispatcher.forward(request, response);
         }catch(Exception e){
             PrintWriter out=response.getWriter();
-            out.println("Error: "+e.getMessage());
+            out.println("Error: "+e.getLocalizedMessage());
         }
     }
 
-<<<<<<< Updated upstream
-    @SuppressWarnings("deprecation")
-    public void proceedMethod(PrintWriter out,Mapping mapping,HttpServletRequest request,HttpServletResponse response) throws Exception{
-        Method method=(Class.forName(mapping.getClassName())).getMethod(mapping.getMethodName());
-        
-        Object result=null;
-        // Raha misy arguments:
-        if (method.getParameters().length > 0) {
-            Object object=(Class.forName(mapping.getClassName())).newInstance();
-            ArrayList<Object> methodParam = new ArrayList<>();
-            methodParam=Fonction.prepareParameter(object, method, request, response);
-            result=method.invoke(object, methodParam.toArray(new Object[]{}));
-        }
-        else{ // Raha tsy mila argument ilay methode :
-            result=mapping.executeMethod(mapping.getClassName(), mapping.getMethodName());
-        }
-
-        if (result==null) throw new Exception("Error with method :");
-=======
 
     @SuppressWarnings("deprecation")
     public void proceedMethod(PrintWriter out,Mapping mapping,HttpServletRequest request,HttpServletResponse response) throws Exception{
@@ -127,7 +108,6 @@ public class Mapping {
         }
 
         if (result==null) throw new Exception("Error with method : Maybe the return type is void");
->>>>>>> Stashed changes
 
         if (method.getReturnType().equals(ModelView.class)) {
             // Si elle return ModelView, charger les data stockés dans son HashMap comme attribut et les stocker par request.setAttribute()

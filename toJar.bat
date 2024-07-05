@@ -24,4 +24,5 @@ xcopy "temp\class\%archive%" "%current%" /y
 
 rmdir /S /Q %temp%
 
+set /p ok="Finished."
 move "%archive%" ..\Test\lib\

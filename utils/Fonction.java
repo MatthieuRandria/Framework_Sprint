@@ -1,29 +1,21 @@
 package utils;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
-<<<<<<< Updated upstream
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-=======
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.sql.Date;
->>>>>>> Stashed changes
 import java.util.ArrayList;
 import annotation.Argument;
 import annotation.Get;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-<<<<<<< Updated upstream
-=======
 import com.thoughtworks.paranamer.AdaptiveParanamer;
 import com.thoughtworks.paranamer.Paranamer;
 
->>>>>>> Stashed changes
 
 public class Fonction {
     public static Method[] getAnnotateMethods(Object controller,Class<? extends Annotation> annot){
@@ -52,11 +44,7 @@ public class Fonction {
         // return new Mapping(splitUrl[length-2], splitUrl[length-1]);
     }
 
-<<<<<<< Updated upstream
-    public Method getMethod(Class<?> clazz,String methodName){
-=======
     public static Method getMethod(Class<?> clazz,String methodName){
->>>>>>> Stashed changes
         Method [] methods = clazz.getDeclaredMethods();
         Method result = null;
         for (int i=0;i< methods.length;i++){
@@ -67,28 +55,8 @@ public class Fonction {
         return result;
     }
 
-<<<<<<< Updated upstream
-    public static ArrayList<Object> prepareParameter(Object obj, Method method, HttpServletRequest request, HttpServletResponse response) throws InvocationTargetException, IllegalAccessException, IOException {
-        Parameter[] argument = method.getParameters();
-        ArrayList<Object> result = new ArrayList<>();
-        for (int i=0;i<argument.length;i++){
-            Annotation arg_annotation = argument[i].getAnnotation(Argument.class);
-            String name_annotation = "";
-            if(arg_annotation != null){
-                name_annotation = ((Argument) arg_annotation).name();
-            }
-            String realName = null;
-            if (request.getParameter(name_annotation) != null){
-                realName = name_annotation;
-            }
-            if (request.getParameter(argument[i].getName()) != null){
-                realName = argument[i].getName();
-            }
-            if(realName != null){
-                result.add(request.getParameter(realName));
-=======
     @SuppressWarnings("deprecation")
-    public static ArrayList<Object> prepareParameter(Object obj, Method method, HttpServletRequest request, HttpServletResponse response) throws InvocationTargetException, IllegalAccessException, IOException ,NoSuchMethodException, InstantiationException{
+    public static ArrayList<Object> prepareParameter(Object obj, Method method, HttpServletRequest request, HttpServletResponse response) throws Exception{
         System.out.println("Preparing args for:"+method.getName());
         Parameter[] argument = method.getParameters();
         ArrayList<Object> result = new ArrayList<>();
@@ -99,9 +67,18 @@ public class Fonction {
             String name_arg = paramName[i];
             if(arg_annotation != null){
                 name_arg = ((Argument) arg_annotation).name();
+            }else{
+                // throw new Exception("ETU002398 : Misy tsy Annoté ny Argument.");
             }
             Class<?> clazz=argument[i].getType();
-            if (Fonction.isObject(clazz)){
+            // if clazz is a type of MySession
+            if(clazz.isAssignableFrom(MySession.class)){
+                System.out.println("Instance of MySession started for "+argument[i].getName());
+                MySession session=new MySession(request.getSession());
+                result.add(session);
+            }
+
+            if (Fonction.isObject(clazz) && !clazz.isAssignableFrom(MySession.class)){ // Raha de type object ilay arguments
                 System.out.println("Argument: "+name_arg+", Object: "+argument[i].getType());
                 Object o=clazz.newInstance();
                 System.out.println(o.getClass().getName());
@@ -112,14 +89,11 @@ public class Fonction {
                 if (request.getParameter(name_arg)!=null) {
                     result.add(Fonction.castValueOfParameter(request.getParameter(name_arg), argument[i].getType()));
                 }
->>>>>>> Stashed changes
             }
         }
         return result;
     }
 
-<<<<<<< Updated upstream
-=======
     public static String [] getParameterName(Method method){
         // Parameter[] params=method.getParameters();
         // String[] res=new String[params.length];
@@ -137,7 +111,8 @@ public class Fonction {
         if(clazz == String.class){
             result = value;
         }
-        if(clazz == Integer.class){
+        // if clazz is type of int
+        if(clazz == Integer.class || clazz == int.class){
             result = Integer.parseInt(value);
         }
         if(clazz == Double.class){
@@ -172,7 +147,7 @@ public class Fonction {
         if(clazz == String.class){
             return false;
         }
-        if(clazz == Integer.class){
+        if(clazz == Integer.class || clazz == int.class){
             return false;
         }
         if(clazz == Double.class){
@@ -184,8 +159,24 @@ public class Fonction {
         return true;
     }
 
+    public static void addSession(Object obj,HttpServletRequest request,HttpServletResponse response) throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, IOException {
+        Field [] attributs = obj.getClass().getDeclaredFields();
+        PrintWriter out = response.getWriter();
+        for (Field attr : attributs){
+            if(attr.getType() == MySession.class){
+                String method_name = "set"+Fonction.maj(attr.getName());
+                MySession session = new MySession(request.getSession());
+                Object [] arguments = new Object[1];
+                arguments[0] = session;
+                out.println("1 : "+attr.getName());
+                obj.getClass().getDeclaredMethod(method_name, MySession.class).invoke(obj,session);
+                out.println("2 : "+attr.getName());
+                break;
+            }
+        }
+    }
 
->>>>>>> Stashed changes
+
     public static void main(String[] args) {
         Fonction manager=new Fonction();
         Method[] methods=getAnnotateMethods(manager, Get.class);
