@@ -1,5 +1,7 @@
 package utils;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -71,7 +73,7 @@ public class Fonction {
             Class<?> clazz=argument[i].getType();
             // if clazz is a type of MySession
             if(clazz.isAssignableFrom(MySession.class)){
-                System.out.println("Instance of MySession started");
+                System.out.println("Instance of MySession started for "+argument[i].getName());
                 MySession session=new MySession(request.getSession());
                 result.add(session);
             }
@@ -109,7 +111,8 @@ public class Fonction {
         if(clazz == String.class){
             result = value;
         }
-        if(clazz == Integer.class){
+        // if clazz is type of int
+        if(clazz == Integer.class || clazz == int.class){
             result = Integer.parseInt(value);
         }
         if(clazz == Double.class){
@@ -144,7 +147,7 @@ public class Fonction {
         if(clazz == String.class){
             return false;
         }
-        if(clazz == Integer.class){
+        if(clazz == Integer.class || clazz == int.class){
             return false;
         }
         if(clazz == Double.class){
@@ -154,6 +157,23 @@ public class Fonction {
             return false;
         }
         return true;
+    }
+
+    public static void addSession(Object obj,HttpServletRequest request,HttpServletResponse response) throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, IOException {
+        Field [] attributs = obj.getClass().getDeclaredFields();
+        PrintWriter out = response.getWriter();
+        for (Field attr : attributs){
+            if(attr.getType() == MySession.class){
+                String method_name = "set"+Fonction.maj(attr.getName());
+                MySession session = new MySession(request.getSession());
+                Object [] arguments = new Object[1];
+                arguments[0] = session;
+                out.println("1 : "+attr.getName());
+                obj.getClass().getDeclaredMethod(method_name, MySession.class).invoke(obj,session);
+                out.println("2 : "+attr.getName());
+                break;
+            }
+        }
     }
 
 
