@@ -11,8 +11,11 @@ import java.sql.Date;
 import java.util.ArrayList;
 import annotation.Argument;
 import annotation.Get;
+import annotation.RestApi;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import com.google.gson.Gson;
 import com.thoughtworks.paranamer.AdaptiveParanamer;
 import com.thoughtworks.paranamer.Paranamer;
 
@@ -53,6 +56,18 @@ public class Fonction {
             }
         }
         return result;
+    }
+
+    public static Boolean isRestApi(Method method){
+        if (method.isAnnotationPresent(RestApi.class)) {
+            return true;
+        } 
+        return false;
+    }
+
+    public static String toJson(Object obj){
+        Gson gson=new Gson();
+        return gson.toJson(gson);
     }
 
     @SuppressWarnings("deprecation")

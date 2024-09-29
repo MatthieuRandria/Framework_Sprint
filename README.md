@@ -58,46 +58,11 @@ Sprint5:
 
 Sprint6:
         Tanjona: 
-<<<<<<< Updated upstream
             Manana formulaire, alaina ny donnees(ny args rehetra) formulaire, passena ny 
         Fanaovana azy:
         -'
-=======
-            Manana formulaire, alaina ny donnees(ny args rehetra) formulaire
-        Fanaovana azy:
         -Ho an'ny config(.xml):
             declarer nom du package des controllers (using 'init-param');
             declarer FrontServlet (Servlet associé a '/')
         Tester!
-
-Sprint7:
-        Tanjona: 
-            Manana formulaire de Type Object, alaina ny donnees(ny args rehetra) formulaire
-        Fanaovana azy:
->>>>>>> Stashed changes
-        -Ho an'ny config(.xml):
-            declarer nom du package des controllers (using 'init-param');
-            declarer FrontServlet (Servlet associé a '/')
         Tester!
-
-Sprint7:
-        Tanjona: 
-            Manana formulaire mandray Objet Annote par @Argument ho an ny args,
-            alaina ny donnees(ny args rehetra)ao @ formulaire
-            Pour preciser Attribut dia asiana ":" ny nom anle input (ex:  'Emp:nom')
-        -Ho an'ny config(.xml):
-            declarer nom du package des controllers (using 'init-param');
-            declarer FrontServlet (Servlet associé a '/')
-        Tester!
-
-Sprint8:
-        Tanjona:
-            Mandray Session 
-        -Fanaovana azy:
-            Manana class MySession izay manana attribut HttpSession,
-            Raha anampy valeur dia MySession.add("key",value)
-        -Ho an'ny config(.xml):
-            declarer nom du package des controllers (using 'init-param');
-            declarer FrontServlet (Servlet associé a '/')
-        Tester!
-

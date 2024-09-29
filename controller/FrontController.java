@@ -43,8 +43,8 @@ public class FrontController extends HttpServlet{
             String url=Fonction.urlExtract(requestUrl);
             Mapping mapping=this.map.get(url);
             if (mapping!=null) {
-                out.println("Annotation: "+url);
-                out.println("Controller: "+mapping.getClassName()+", Method: "+mapping.getMethodName());
+                // out.println("Annotation: "+url);
+                // out.println("Controller: "+mapping.getClassName()+", Method: "+mapping.getMethodName());
                 try {
                     mapping.proceedMethod(out, mapping, req, resp);
                 } catch (Exception e) {
@@ -57,8 +57,6 @@ public class FrontController extends HttpServlet{
         }else{
             out.println("No Mapping Found");
         }
-
-
     }
 
     @Override
