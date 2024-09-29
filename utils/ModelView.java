@@ -33,6 +33,7 @@ public class ModelView {
     public ModelView(String page){
         this.setUrl(page);
     }
+
     public void add(String key,Object data){
         this.data.put(key,data);
     }

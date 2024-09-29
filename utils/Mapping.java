@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gson.Gson;
+
 import annotation.AnnotController;
 import annotation.Get;
 import controller.ControllerManager;
@@ -109,18 +111,39 @@ public class Mapping {
 
         if (result==null) throw new Exception("Error with method : Maybe the return type is void");
 
-        if (method.getReturnType().equals(ModelView.class)) {
-            // Si elle return ModelView, charger les data stockés dans son HashMap comme attribut et les stocker par request.setAttribute()
-            ModelView modelView=(ModelView) result;
-            this.dispatchModelView(modelView, request, response);
-
-        }else if (method.getReturnType().equals(String.class)) { 
-            // Si la methode return String printer le.
-            out.println(result.toString());
-        
+        // Si method annoté par RestApi 
+        if (Fonction.isRestApi(method)) {
+            if (method.getReturnType().equals(ModelView.class)) {
+                ModelView modelView=(ModelView) result;
+                for (Map.Entry<String,Object> donnee : modelView.getData().entrySet()) {
+                    String json=Fonction.toJson(donnee.getValue());
+                    response.setContentType("text/json");
+                    response.setCharacterEncoding("UTF-8");
+                    out.println(json); 
+                }
+            }else{
+                System.out.println("Printing JSON object");
+                Gson gson=new Gson();
+                String json=gson.toJson(result);
+                System.out.println(json);
+                response.setContentType("text/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().println(json);
+            }
+        // sinon Mandeha normalement
         }else{
-            throw new Exception("Sorry, The return type '"+method.getReturnType()+"' of the method "+mapping.getMethodName()+" from "+mapping.getClassName()+" is undefined for me.");
-        }
+            if (method.getReturnType().equals(ModelView.class)) {
+                // Si elle return ModelView, charger les data stockés dans son HashMap comme attribut et les stocker par request.setAttribute()
+                ModelView modelView=(ModelView) result;
+                this.dispatchModelView(modelView, request, response);
+    
+            }else if (method.getReturnType().equals(String.class)) { 
+                // Si la methode return String printer le.
+                out.println(result.toString());
+            }else{
+                throw new Exception("Sorry, The return type '"+method.getReturnType()+"' of the method "+mapping.getMethodName()+" from "+mapping.getClassName()+" is undefined for me.");
+            }
+        }        
     }
 
     public static void main(String[] args) {
