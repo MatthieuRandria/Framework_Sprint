@@ -11,7 +11,9 @@ import java.sql.Date;
 import java.util.ArrayList;
 import annotation.Argument;
 import annotation.Get;
+import annotation.Post;
 import annotation.RestApi;
+import annotation.Url;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -51,7 +53,7 @@ public class Fonction {
         Method [] methods = clazz.getDeclaredMethods();
         Method result = null;
         for (int i=0;i< methods.length;i++){
-            if (methods[i].isAnnotationPresent(Get.class) && methods[i].getName().compareTo(methodName)==0) {
+            if (methods[i].isAnnotationPresent(Url.class) && methods[i].getName().compareTo(methodName)==0) {
                 result=methods[i];
             }
         }
@@ -192,11 +194,19 @@ public class Fonction {
     }
 
 
-    public static void main(String[] args) {
-        Fonction manager=new Fonction();
-        Method[] methods=getAnnotateMethods(manager, Get.class);
-        for (Method method : methods) {
-            System.out.println(method.getAnnotation(Get.class).url());
+    /**
+     * 
+     */
+    public static String getVerb(Method method){
+        if (method.isAnnotationPresent(Get.class)) {
+            return "GET";
+        }if (method.isAnnotationPresent(Post.class)) {
+            return "POST";
         }
+        return "GET";
+    }
+
+
+    public static void main(String[] args) {
     }
 }

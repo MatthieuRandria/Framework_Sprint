@@ -5,7 +5,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Vector;
 
-import annotation.Get;
 
 public class Reflect{
 
@@ -70,13 +69,6 @@ public class Reflect{
     }
 
     public static void main(String[] args) {
-        Reflect r=new Reflect();
-        Method[] methods=Reflect.getAnnotatedMethod(r, Get.class);
-        for (Method method : methods) {
-            System.out.println(method.getAnnotation(Get.class).url());
-            System.out.println(Reflect.getClassName(r));
-            System.out.println(method.getName());
-        }
     }
 
 }
