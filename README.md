@@ -65,4 +65,3 @@ Sprint6:
             declarer nom du package des controllers (using 'init-param');
             declarer FrontServlet (Servlet associé a '/')
         Tester!
-        Tester!

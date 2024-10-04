@@ -9,16 +9,23 @@ import java.util.Map;
 import com.google.gson.Gson;
 
 import annotation.AnnotController;
-import annotation.Get;
+import annotation.Url;
 import controller.ControllerManager;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class Mapping {
+    String verb;
     String className;
     String methodName;
     
+    public String getVerb() {
+        return verb;
+    }
+    public void setVerb(String verb) {
+        this.verb = verb;
+    }
     public String getClassName() {
         return className;
     }
@@ -32,9 +39,10 @@ public class Mapping {
         this.methodName = methodName;
     }
 
-    public Mapping(String className, String methodName) {
+    public Mapping(String className, String methodName, String verb) {
         this.setClassName(className);
         this.setMethodName(methodName);
+        this.setVerb(verb);
     }
 
     public Mapping() {
@@ -44,15 +52,15 @@ public class Mapping {
     public HashMap<String,Mapping> scanController(ArrayList<Class<?>> controllers) throws Exception{
         HashMap<String,Mapping> map=new HashMap<String,Mapping>();
         for (Class<?> class1 : controllers) {
-            Method[] methods=Reflect.getAnnotatedMethod(class1.newInstance(), Get.class);
+            Method[] methods=Reflect.getAnnotatedMethod(class1.newInstance(), Url.class);
             System.out.println("Scanning "+class1.getSimpleName());
             if (methods.length>0) {
                 // Ampidiriana ao @Map izay methode annote
                 for (Method method : methods) {
-                    String url=method.getAnnotation(Get.class).url();
+                    String url=method.getAnnotation(Url.class).url();
                     System.out.println("method found: "+url);
                     if (map.get(url)==null) {
-                        map.put(url, new Mapping(class1.getName(), method.getName()));
+                        map.put(url, new Mapping(class1.getName(), method.getName(), Fonction.getVerb(method)));
                     }else{
                         throw new Exception("Duplicate URL :"+url);
                     }

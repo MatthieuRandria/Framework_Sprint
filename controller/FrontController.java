@@ -34,7 +34,7 @@ public class FrontController extends HttpServlet{
         }
     }
 
-    private void processRequest(HttpServletRequest req,HttpServletResponse resp)throws ServletException, IOException, Exception{
+    private void processRequest(HttpServletRequest req,HttpServletResponse resp, String verb)throws ServletException, IOException, Exception{
         PrintWriter out=resp.getWriter();
         
         String requestUrl=req.getRequestURI();
@@ -43,12 +43,12 @@ public class FrontController extends HttpServlet{
             String url=Fonction.urlExtract(requestUrl);
             Mapping mapping=this.map.get(url);
             if (mapping!=null) {
-                // out.println("Annotation: "+url);
-                // out.println("Controller: "+mapping.getClassName()+", Method: "+mapping.getMethodName());
-                try {
-                    mapping.proceedMethod(out, mapping, req, resp);
-                } catch (Exception e) {
-                    out.println("Error : "+e.getLocalizedMessage());
+                if (mapping.getVerb().compareTo(verb)==0) {
+                    try {
+                        mapping.proceedMethod(out, mapping, req, resp);
+                    } catch (Exception e) {
+                        out.println("Error : "+e.getLocalizedMessage());
+                    }
                 }
             }else{
                 out.println("Error 404 not found, (No Mapping for : '"+url+"'')");
@@ -62,7 +62,7 @@ public class FrontController extends HttpServlet{
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            this.processRequest(req,resp);
+            this.processRequest(req,resp, "GET");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -72,7 +72,7 @@ public class FrontController extends HttpServlet{
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try{
-            this.processRequest(req, resp);
+            this.processRequest(req, resp, "POST");
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
