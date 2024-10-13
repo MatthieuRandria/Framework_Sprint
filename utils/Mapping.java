@@ -8,9 +8,7 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 
-import annotation.AnnotController;
 import annotation.Url;
-import controller.ControllerManager;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -68,6 +66,7 @@ public class Mapping {
             }else{
                 System.out.println("No method annotated in "+class1.getName());
             }
+            
         }
         return map;
     }
@@ -121,23 +120,7 @@ public class Mapping {
 
         // Si method annoté par RestApi 
         if (Fonction.isRestApi(method)) {
-            if (method.getReturnType().equals(ModelView.class)) {
-                ModelView modelView=(ModelView) result;
-                for (Map.Entry<String,Object> donnee : modelView.getData().entrySet()) {
-                    String json=Fonction.toJson(donnee.getValue());
-                    response.setContentType("text/json");
-                    response.setCharacterEncoding("UTF-8");
-                    out.println(json); 
-                }
-            }else{
-                System.out.println("Printing JSON object");
-                Gson gson=new Gson();
-                String json=gson.toJson(result);
-                System.out.println(json);
-                response.setContentType("text/json");
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().println(json);
-            }
+            this.treatRestApi(method, result, request, response);
         // sinon Mandeha normalement
         }else{
             if (method.getReturnType().equals(ModelView.class)) {
@@ -154,24 +137,35 @@ public class Mapping {
         }        
     }
 
-    public static void main(String[] args) {
-        try {
-            Mapping mapping=new Mapping();
-            ArrayList<Class<?>> controllers=ControllerManager.getAnnotatedClasses("utils", AnnotController.class);
-            HashMap<String,Mapping> map=mapping.scanController(controllers);
-            Mapping mapping2=map.get("/testModel");
-            System.out.println(mapping2.getClassName());
-            System.out.println(mapping2.getMethodName());
-            // mapping.proceedTest(mapping2);
-            
-            ArrayList<Object> argus=new ArrayList<Object>();
-            argus.add("Matthieu");
-        
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
+    /**
+     * Treat RestApi methods
+     * @param method : The method to be mapped
+     * @param result : The return of the method
+     * @param request : 
+     * @param response
+     * @throws Exception
+     */
+    public void treatRestApi(Method method,Object result,HttpServletRequest request,HttpServletResponse response) throws Exception{
+        if (method.getReturnType().equals(ModelView.class)) {
+            ModelView modelView=(ModelView) result;
+            for (Map.Entry<String,Object> donnee : modelView.getData().entrySet()) {
+                String json=Fonction.toJson(donnee.getValue());
+                response.setContentType("text/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().println(json); 
+            }
+        }else{
+            System.out.println("Printing JSON object");
+            Gson gson=new Gson();
+            String json=gson.toJson(result);
+            System.out.println(json);
+            response.setContentType("text/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().println(json);
+        }   
+    }
 
+    public static void main(String[] args) {
     }
     
 }

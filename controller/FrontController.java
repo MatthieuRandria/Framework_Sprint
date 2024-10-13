@@ -47,7 +47,8 @@ public class FrontController extends HttpServlet{
                     try {
                         mapping.proceedMethod(out, mapping, req, resp);
                     } catch (Exception e) {
-                        out.println("Error : "+e.getLocalizedMessage());
+                        resp.setContentType("text/html");
+                        out.println(Fonction.pageError(e));
                     }
                 }
             }else{
