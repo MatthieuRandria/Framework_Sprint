@@ -10,11 +10,12 @@ import annotation.AnnotController;
 import utils.Fonction;
 import utils.Mapping;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-
+@MultipartConfig // for multipart handling
 public class FrontController extends HttpServlet{
 
     private ArrayList<Class<?>> controllers=null;
