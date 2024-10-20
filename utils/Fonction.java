@@ -16,6 +16,7 @@ import annotation.RestApi;
 import annotation.Url;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 
 import com.google.gson.Gson;
 import com.thoughtworks.paranamer.AdaptiveParanamer;
@@ -89,13 +90,17 @@ public class Fonction {
             }
             Class<?> clazz=argument[i].getType();
             // if clazz is a type of MySession
+            if(clazz.isAssignableFrom(Part.class)){
+                System.out.println("Instance of Part found : "+argument[i].getName());
+                result.add(request.getPart(name_arg));
+            }
             if(clazz.isAssignableFrom(MySession.class)){
                 System.out.println("Instance of MySession started for "+argument[i].getName());
                 MySession session=new MySession(request.getSession());
                 result.add(session);
             }
 
-            if (Fonction.isObject(clazz) && !clazz.isAssignableFrom(MySession.class)){ // Raha de type object ilay arguments
+            if (Fonction.isObject(clazz) && !clazz.isAssignableFrom(MySession.class) && !clazz.isAssignableFrom(Part.class)){ // Raha de type object ilay arguments
                 System.out.println("Argument: "+name_arg+", Object: "+argument[i].getType());
                 Object o=clazz.newInstance();
                 System.out.println(o.getClass().getName());
@@ -204,6 +209,22 @@ public class Fonction {
             return "POST";
         }
         return "GET";
+    }
+
+    public static String pageError(Exception e){
+        return "<!DOCTYPE html>\r\n" + //
+        "<html lang=\"en\">\r\n" + //
+        "<head>\r\n" + //
+        "    <meta charset=\"UTF-8\">\r\n" + //
+        "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n" + //
+        "    <title>Document</title>\r\n" + //
+        "</head>\r\n" + //
+        "<body>\r\n" + //
+        "    <h1>ProcessRequest Error:</h1>\r\n" + //
+        "<p>Error😒:"+e.getLocalizedMessage()+"</p><hr>\r\n" + //
+        "<p>Cause :"+e.getCause()+"</p>\r\n" + //
+        "</body>\r\n" + //
+        "</html>";
     }
 
 
