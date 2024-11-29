@@ -65,3 +65,22 @@ Sprint6:
             declarer nom du package des controllers (using 'init-param');
             declarer FrontServlet (Servlet associé a '/')
         Tester!
+
+Sprint13:
+    Niveau developper:
+    Validation:
+        afaka atao au niveau front
+        formulaire mameno class iray , annotena au niveau champ (ex: int id required)
+        throw Exception raha  tsy mety
+
+Sprint14:
+    Niveau developper:
+    Validation:
+        izay input misy erreur de averina miaraka @Orera
+        return error eo @class input raha tsy remplit
+
+        
+
+authentication:
+        annotation (admin,client)
+        hoe tsy afaka mahazo ny fonctionnalite admin ny client par exemple

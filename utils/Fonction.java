@@ -86,7 +86,7 @@ public class Fonction {
             if(arg_annotation != null){
                 name_arg = ((Argument) arg_annotation).name();
             }else{
-                // throw new Exception("ETU002398 : Misy tsy Annoté ny Argument.");
+                throw new Exception("ETU002398 : Misy tsy Annoté ny Argument.");
             }
             Class<?> clazz=argument[i].getType();
             // if clazz is a type of MySession
@@ -101,9 +101,10 @@ public class Fonction {
             }
 
             if (Fonction.isObject(clazz) && !clazz.isAssignableFrom(MySession.class) && !clazz.isAssignableFrom(Part.class)){ // Raha de type object ilay arguments
-                System.out.println("Argument: "+name_arg+", Object: "+argument[i].getType());
-                Object o=clazz.newInstance();
-                System.out.println(o.getClass().getName());
+                System.out.println("Argument: " + name_arg + ", Object: " + argument[i].getType());
+                System.out.println("Name : " + clazz.getName());
+                Object o = clazz.newInstance();
+                System.out.println("Name of Object : " + o.getClass().getName());
                 result.add(Fonction.prepareObject(name_arg,o,request));
                 System.out.println("Parameter Prepared for "+method.getName());
             }
@@ -137,7 +138,7 @@ public class Fonction {
         if(clazz == Integer.class || clazz == int.class){
             result = Integer.parseInt(value);
         }
-        if(clazz == Double.class){
+        if(clazz == Double.class || clazz == double.class){
             result = Double.parseDouble(value);
         }
         if(clazz == Date.class){
@@ -146,16 +147,20 @@ public class Fonction {
         return result;
     }
 
-    public static Object prepareObject (String name,Object obj, HttpServletRequest request) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public static Object prepareObject (String name,Object obj, HttpServletRequest request) throws IllegalArgumentException, Exception {
         System.out.println("Preparing object: "+obj.getClass().getName());
         Field[] attributs = obj.getClass().getDeclaredFields();
+        Validation validation = new Validation();
         for (Field attr : attributs){
             String method_name = "set"+Fonction.maj(attr.getName());
             System.out.println(method_name);
             Method method = obj.getClass().getDeclaredMethod(method_name,attr.getType());
             String input_name = name+":"+attr.getName();
-            if(request.getParameter(input_name)!=null){
-                method.invoke(obj,Fonction.castValueOfParameter(request.getParameter(input_name),attr.getType()));
+            String value = request.getParameter(input_name);
+            if(value != null){
+                if (validation.checkValidation(attr, value)) {
+                    method.invoke(obj,Fonction.castValueOfParameter(value, attr.getType()));
+                }
             }
         }
         return obj;
@@ -221,13 +226,11 @@ public class Fonction {
         "</head>\r\n" + //
         "<body>\r\n" + //
         "    <h1>ProcessRequest Error:</h1>\r\n" + //
-        "<p>Error😒:"+e.getLocalizedMessage()+"</p><hr>\r\n" + //
-        "<p>Cause :"+e.getCause()+"</p>\r\n" + //
+        "<p>Error :"+e.getMessage()+"</p><hr>\r\n" + //
+        "<p>Cause :"+e.getCause()   +"</p>\r\n" + //
         "</body>\r\n" + //
         "</html>";
     }
 
 
-    public static void main(String[] args) {
-    }
 }
